@@ -10,11 +10,11 @@ namespace Walrus_Class_Library.Services
 {
     public class Authentication
     {
-        private readonly string apiKey;
+        private readonly string _apiKey;
 
         public Authentication(IConfiguration configuration)
         {
-            this.apiKey = configuration["Firebase:ApiKey"];
+            this._apiKey = configuration["Firebase:ApiKey"];
         }
 
         public async Task<HttpResponseMessage> RegisterUser(string email, string password)
@@ -28,7 +28,7 @@ namespace Walrus_Class_Library.Services
             }), Encoding.UTF8, "application/json");
 
             var response = await httpClient.PostAsync(
-                $"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={apiKey}", content);
+                $"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={_apiKey}", content);
             return response; 
         }
 
@@ -43,8 +43,8 @@ namespace Walrus_Class_Library.Services
             }), Encoding.UTF8, "application/json");
 
             var response = await httpClient.PostAsync(
-                $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={apiKey}", content);
-            return response; // This result will contain the ID token and refresh token.
+                $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={_apiKey}", content);
+            return response; 
         }
     }
 }
