@@ -17,7 +17,7 @@ namespace Walrus_Class_Library.Services
             this.apiKey = configuration["Firebase:ApiKey"];
         }
 
-        public async Task<string> RegisterUser(string email, string password)
+        public async Task<HttpResponseMessage> RegisterUser(string email, string password)
         {
             using var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(new
@@ -29,11 +29,10 @@ namespace Walrus_Class_Library.Services
 
             var response = await httpClient.PostAsync(
                 $"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={apiKey}", content);
-            var result = await response.Content.ReadAsStringAsync();
-            return result; // This result will contain the ID token and refresh token.
+            return response; 
         }
 
-        public async Task<string> LoginUser(string email, string password)
+        public async Task<HttpResponseMessage> LoginUser(string email, string password)
         {
             using var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(new
@@ -45,8 +44,7 @@ namespace Walrus_Class_Library.Services
 
             var response = await httpClient.PostAsync(
                 $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={apiKey}", content);
-            var result = await response.Content.ReadAsStringAsync();
-            return result; // This result will contain the ID token and refresh token.
+            return response; // This result will contain the ID token and refresh token.
         }
     }
 }

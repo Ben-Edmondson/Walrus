@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Walrus Class Library", "Walrus Class Library\Walrus Class Library.csproj", "{262FAA1A-478C-4A5C-862B-FD9A187906B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Walrus-Console-Edition", "Walrus-Console-Edition\Walrus-Console-Edition.csproj", "{D8C9B7BE-33C9-4ACB-8365-2D94DB065A91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{262FAA1A-478C-4A5C-862B-FD9A187906B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{262FAA1A-478C-4A5C-862B-FD9A187906B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{262FAA1A-478C-4A5C-862B-FD9A187906B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8C9B7BE-33C9-4ACB-8365-2D94DB065A91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8C9B7BE-33C9-4ACB-8365-2D94DB065A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8C9B7BE-33C9-4ACB-8365-2D94DB065A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8C9B7BE-33C9-4ACB-8365-2D94DB065A91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
