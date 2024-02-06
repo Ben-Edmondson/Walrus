@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 walrus-SDK-Account-Key.json
+keys.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

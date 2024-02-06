@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Walrus_Class_Library.Input;
+using Walrus_Class_Library.Repository;
+
 namespace Walrus_Console_Edition
 {
     public class Program
@@ -12,7 +14,12 @@ namespace Walrus_Console_Edition
             var host = CreateHostBuilder(args).Build();
 
             var authService = host.Services.GetRequiredService<Authentication>();
+            var initFirebase = host.Services.GetRequiredService<InitialiseFirebase>();
+            var writeToDb = host.Services.GetRequiredService<WriteToDb>();
             var userInput = new UserInput();
+
+            var firebaseClient = initFirebase.Initialise();
+            await writeToDb.WriteData(firebaseClient);
 
             string email = userInput.GetUserName("Please enter a valid email.");
             string password = userInput.GetPassword("Please enter a valid password.");
@@ -26,6 +33,7 @@ namespace Walrus_Console_Edition
             Console.WriteLine(loginResponse.IsSuccessStatusCode
                 ? "User logged in successfully!"
                 : "User login failed!");
+
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -39,6 +47,8 @@ namespace Walrus_Console_Edition
                     IConfiguration configuration = hostContext.Configuration;
                     services.AddSingleton<Authentication>(_ =>
                         new Authentication(configuration));
+                    services.AddSingleton<InitialiseFirebase>();
+                    services.AddSingleton<WriteToDb>();
                 });
     }
 }

@@ -1,20 +1,36 @@
-﻿
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
+﻿using Firebase.Database;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Walrus_Class_Library.Services
 {
     public class InitialiseFirebase
     {
-        string pathToKey = "C:/Users/bened/Desktop/Uni/Dissertation/Walrus/Walrus Class Library/Services/walrus-SDK-Account-Key.json";
-        public void Initialise()
+        private FirebaseClient firebaseClient;
+        private IConfiguration config;
+
+        public InitialiseFirebase()
         {
-            var credentials = GoogleCredential.FromFile(pathToKey);
-            var app = FirebaseApp.Create(new AppOptions
-            {
-                Credential = credentials
-            });
-            throw new NotImplementedException();
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("keys.json", optional: false, reloadOnChange: true);
+            config = builder.Build();
+        }
+
+        public FirebaseClient Initialise()
+        {
+            var firebaseUrl = config["Firebase:Url"];
+            var authToken = config["Firebase:AuthToken"];
+
+            firebaseClient = new FirebaseClient(
+                firebaseUrl,
+                new FirebaseOptions
+                {
+                    AuthTokenAsyncFactory = () => Task.FromResult(authToken)
+                });
+            return firebaseClient;
         }
     }
 }
