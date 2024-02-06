@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Walrus_Class_Library.Services;
+﻿using Walrus_Class_Library.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,16 +28,16 @@ namespace Walrus_Console_Edition
                 : "User login failed!");
         }
 
-        static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, configuration) =>
+                .ConfigureAppConfiguration((configuration) =>
                 {
                     configuration.AddUserSecrets<Program>();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
                     IConfiguration configuration = hostContext.Configuration;
-                    services.AddSingleton<Authentication>(provider =>
+                    services.AddSingleton<Authentication>(_ =>
                         new Authentication(configuration));
                 });
     }
