@@ -4,6 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Walrus_Class_Library.Input;
 using Walrus_Class_Library.Repository;
+using Firebase.Database;
+using Grpc.Core;
+using Walrus_Class_Library.Models;
 
 namespace Walrus_Console_Edition
 {
@@ -12,28 +15,52 @@ namespace Walrus_Console_Edition
         public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-
             var authService = host.Services.GetRequiredService<Authentication>();
-            var initFirebase = host.Services.GetRequiredService<InitialiseFirebase>();
-            var writeToDb = host.Services.GetRequiredService<WriteToDb>();
+            var initialiseFirebase = new InitialiseFirebase();
+            var firebaseClient = initialiseFirebase.Initialise();
+            var firebaseIntegration = host.Services.GetRequiredService<FirebaseIntegration>();
             var userInput = new UserInput();
+            Console.WriteLine("Welcome to the Walrus Console Edition!");
+            int option = 0;
+            while (option != 1 && option != 2)
+            {
+                Console.WriteLine("1. Register");
+                Console.WriteLine("2. Login");
+                option = userInput.Options("Enter 1 or 2:");
+            }
 
-            var firebaseClient = initFirebase.Initialise();
-            await writeToDb.WriteData(firebaseClient);
+            string email = "", password = "";
+            bool success = false;
 
-            string email = userInput.GetUserName("Please enter a valid email.");
-            string password = userInput.GetPassword("Please enter a valid password.");
+            if (option == 1)
+            {
+                while (!success)
+                {
+                    email = userInput.GetUserName("Enter email:");
+                    password = userInput.GetPassword("Enter password:");
+                    var response = await authService.RegisterUser(email, password);
+                    success = response.IsSuccessStatusCode;
+                    Console.WriteLine(success ? "Registered!" : "Try again.");
+                }
+            }
 
-            var registerResponse = await authService.RegisterUser(email, password);
-            Console.WriteLine(registerResponse.IsSuccessStatusCode
-                ? "User registered successfully!"
-                : "User registration failed!");
+            AuthenticateUserViewModel dataModel = new AuthenticateUserViewModel();
+            success = false; 
 
-            var loginResponse = await authService.LoginUser(email, password);
-            Console.WriteLine(loginResponse.IsSuccessStatusCode
-                ? "User logged in successfully!"
-                : "User login failed!");
+            while (!success)
+            {
+                if (option == 2) 
+                {
+                    email = userInput.GetUserName("Enter email:");
+                    password = userInput.GetPassword("Enter password:");
+                }
+                dataModel = await authService.LoginUser(email, password);
+                success = dataModel.StatusCode == System.Net.HttpStatusCode.OK;
+                Console.WriteLine(success ? "Logged in!" : "Try again.");
+            }
+            Console.ReadLine();
 
+            await firebaseIntegration.UpdateUserToOffline(firebaseClient, dataModel.User);
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -45,10 +72,22 @@ namespace Walrus_Console_Edition
                 .ConfigureServices((hostContext, services) =>
                 {
                     IConfiguration configuration = hostContext.Configuration;
+
+                    services.AddSingleton(_ =>
+                    {
+                        var initialiseFirebase = new InitialiseFirebase();
+                        return initialiseFirebase; 
+                    });
+                    services.AddSingleton<FirebaseIntegration>();
+
                     services.AddSingleton<Authentication>(_ =>
-                        new Authentication(configuration));
-                    services.AddSingleton<InitialiseFirebase>();
-                    services.AddSingleton<WriteToDb>();
+                    {
+                        var initialiseFirebase = new InitialiseFirebase();
+                        var firebaseClient = initialiseFirebase.Initialise();
+                        var firebaseIntegration = new FirebaseIntegration();
+                        return new Authentication(configuration, firebaseClient, firebaseIntegration);
+                    });
+
                 });
     }
 }

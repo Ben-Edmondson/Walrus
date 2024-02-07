@@ -9,7 +9,7 @@ namespace Walrus_Class_Library.Models
     public class UserPresenceViewModel
     {
         public string UID { get; set; }
-        public string ConnectionStatus { get; set; }
+        public bool ConnectionStatus { get; set; }
         public DateTime? LastOnline { get; set; }
 
     }
