@@ -8,7 +8,7 @@
     Title="WalrusFront">
 
     <ShellContent
-        Title="Home"
+        Title="Walrus-Communication-Service"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 

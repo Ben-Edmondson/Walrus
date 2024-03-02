@@ -2,23 +2,31 @@
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
 
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private async void OnLoginClicked(object sender, EventArgs e)
         {
-            count++;
+            var username = usernameEntry.Text;
+            var password = passwordEntry.Text;
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
+            // Here you'd typically call your authentication logic
+            // For demonstration, let's just pretend we always succeed
+            bool isAuthenticated = true; // Placeholder for authentication check
+
+            if (isAuthenticated)
+            {
+                // Navigate to another page or show a success message
+                await DisplayAlert("Login Successful", "You are now logged in.", "OK");
+            }
             else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            {
+                // Show an error message
+                await DisplayAlert("Login Failed", "Please check your username and password and try again.", "OK");
+            }
         }
     }
 
