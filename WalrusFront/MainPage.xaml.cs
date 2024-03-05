@@ -1,31 +1,35 @@
-﻿namespace WalrusFront
+﻿using System.Text;
+using System.Threading.Tasks;
+using WalrusClassLibrary.Auth;
+using System.IdentityModel.Tokens.Jwt;
+
+
+namespace WalrusFront
 {
     public partial class MainPage : ContentPage
     {
-
-        public MainPage()
+        private AuthenticationService _authService;
+        public MainPage(AuthenticationService authenticationService)
         {
             InitializeComponent();
+            _authService = authenticationService;
         }
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
-            var username = usernameEntry.Text;
-            var password = passwordEntry.Text;
-
-            // Here you'd typically call your authentication logic
-            // For demonstration, let's just pretend we always succeed
-            bool isAuthenticated = true; // Placeholder for authentication check
-
-            if (isAuthenticated)
+            try
             {
-                // Navigate to another page or show a success message
-                await DisplayAlert("Login Successful", "You are now logged in.", "OK");
+                var result = await _authService.SignInAsync(CancellationToken.None);
+                var token = result?.IdToken; // AccessToken also can be used
+                if (token != null)
+                {
+                    var handler = new JwtSecurityTokenHandler();
+                    var data = handler.ReadJwtToken(token); }
             }
-            else
+            catch (Exception ex)
             {
-                // Show an error message
-                await DisplayAlert("Login Failed", "Please check your username and password and try again.", "OK");
+                // Handle or log the exception as needed
+                await DisplayAlert("Login Error", "Authentication failed: " + ex.Message, "OK");
             }
         }
     }

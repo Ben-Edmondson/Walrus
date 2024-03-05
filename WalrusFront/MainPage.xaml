@@ -5,22 +5,7 @@
 
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center">
-            <Label Text="Login"
-                   FontSize="24"
-                   HorizontalOptions="Center" />
-
-            <Entry x:Name="usernameEntry"
-                   Placeholder="Username"
-                   VerticalOptions="Start"
-                   Keyboard="Default" />
-
-            <Entry x:Name="passwordEntry"
-                   Placeholder="Password"
-                   VerticalOptions="Start"
-                   IsPassword="true"
-                   Keyboard="Default" />
-
-            <Button x:Name="loginButton" Text="Login" Clicked="OnLoginClicked"/>
+            <Button x:Name="LoginButton" Text="Log In" Clicked="OnLoginClicked"/>
         </VerticalStackLayout>
     </ScrollView>
 
