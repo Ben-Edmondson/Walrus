@@ -8,7 +8,7 @@ namespace WalrusFront
 {
     public partial class MainPage : ContentPage
     {
-        private AuthenticationService _authService;
+        private readonly AuthenticationService _authService;
         public MainPage(AuthenticationService authenticationService)
         {
             InitializeComponent();
@@ -20,15 +20,13 @@ namespace WalrusFront
             try
             {
                 var result = await _authService.SignInAsync(CancellationToken.None);
-                var token = result?.IdToken; // AccessToken also can be used
-                if (token != null)
-                {
-                    var handler = new JwtSecurityTokenHandler();
-                    var data = handler.ReadJwtToken(token); }
+                var token = result?.IdToken;
+                if (token == null) return;
+                var handler = new JwtSecurityTokenHandler();
+                var data = handler.ReadJwtToken(token);
             }
             catch (Exception ex)
             {
-                // Handle or log the exception as needed
                 await DisplayAlert("Login Error", "Authentication failed: " + ex.Message, "OK");
             }
         }

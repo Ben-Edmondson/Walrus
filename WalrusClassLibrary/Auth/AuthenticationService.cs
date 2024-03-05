@@ -24,13 +24,12 @@ namespace WalrusClassLibrary.Auth
             {
                 var result = await _pca
                     .AcquireTokenInteractive(_scopes)
-                    .WithPrompt(Prompt.ForceLogin) //This is optional. If provided, on each execution, the username and the password must be entered.
+                    .WithPrompt(Prompt.ForceLogin) 
                     .ExecuteAsync(cancellationToken);
                 return result;
             }
             catch (Exception ex)
             {
-                // Handle exception
                 throw ex;
             }
         }
