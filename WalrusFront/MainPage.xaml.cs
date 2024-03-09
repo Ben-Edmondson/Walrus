@@ -24,6 +24,7 @@ namespace WalrusFront
                 if (token == null) return;
                 var handler = new JwtSecurityTokenHandler();
                 var data = handler.ReadJwtToken(token);
+                await Navigation.PushAsync(new LandingPage());
             }
             catch (Exception ex)
             {

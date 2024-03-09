@@ -6,7 +6,9 @@
         {
             InitializeComponent();
 
-            MainPage = serviceProvider.GetService<MainPage>();
+            var mainPage = serviceProvider.GetService<MainPage>();
+            MainPage = new NavigationPage(mainPage);
+
         }
     }
 }

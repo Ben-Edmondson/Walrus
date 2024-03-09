@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WalrusClassLibrary.Auth;
-using Microsoft.Extensions.Configuration;
-using WalrusFront.WinUI;
 
 namespace WalrusFront
 {
@@ -26,7 +24,8 @@ namespace WalrusFront
             {
                 ClientId = builder.Configuration["Authentication:ClientId"],
             };
-            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<LandingPage>();
             builder.Services.AddSingleton(new AuthenticationService(connectionStuff));
 #if DEBUG
             builder.Logging.AddDebug();
